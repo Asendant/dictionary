@@ -34,7 +34,7 @@ let currentWordData = {};
 
 // Navbar Functions
 logo.addEventListener('click', () => {
-    window.location.href = '/';
+    window.location.href = 'https://https://asendant.github.io/dictionary';
 })
 
 navbarFontSelector.addEventListener('click', function() {
@@ -125,10 +125,14 @@ themeSelector.addEventListener('change', function() {
     }
 });
 
-// Search Bar Functions
-searchBar.addEventListener('search', async (event) => {
+const form = document.querySelector('form'); // Ensure you have a form element wrapping your input
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
     if (searchBar.value === '') {
         handleEmptySearch();
+        return;
     }
 
     fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + searchBar.value)
@@ -136,9 +140,7 @@ searchBar.addEventListener('search', async (event) => {
     .then(data => {
         console.log(data);
         let wordData = () => {
-            // filter the data to make sure you get the right information (phonetics have both text and audio)
             phoneticsArray = data[0].phonetics;
-            // Check each phonetic for the first one with a text and audio attribute
             for (const phonetic of phoneticsArray) {
                 if (phonetic.text && phonetic.audio) {
                     return {
@@ -158,10 +160,85 @@ searchBar.addEventListener('search', async (event) => {
     })
     .catch(error => {
         wordInfo.classList.add('hidden');
-        wordDefinition.classList.add('hidden')
+        wordDefinition.classList.add('hidden');
         wordNotFound.classList.remove('hidden');
+    });
+});
+
+// Retain the existing search event listener if needed
+searchBar.addEventListener('search', function(event) {
+    if (searchBar.value === '') {
+        handleEmptySearch();
+        return;
+    }
+
+    fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + searchBar.value)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        let wordData = () => {
+            phoneticsArray = data[0].phonetics;
+            for (const phonetic of phoneticsArray) {
+                if (phonetic.text && phonetic.audio) {
+                    return {
+                        word: data[0].word,
+                        phonetic: phonetic.text,
+                        audio: phonetic.audio,
+                        meaning: data[0].meanings,
+                        sourceURLs: data[0].sourceUrls
+                    }
+                }
+            }
+        }
+
+        currentWordData = wordData();
+    
+        handleWordInfo();
     })
-})
+    .catch(error => {
+        wordInfo.classList.add('hidden');
+        wordDefinition.classList.add('hidden');
+        wordNotFound.classList.remove('hidden');
+    });
+});
+
+// Search Bar Functions
+// searchBar.addEventListener('search', async (event) => {
+//     if (searchBar.value === '') {
+//         handleEmptySearch();
+//     }
+
+//     fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + searchBar.value)
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data);
+//         let wordData = () => {
+//             // filter the data to make sure you get the right information (phonetics have both text and audio)
+//             phoneticsArray = data[0].phonetics;
+//             // Check each phonetic for the first one with a text and audio attribute
+//             for (const phonetic of phoneticsArray) {
+//                 if (phonetic.text && phonetic.audio) {
+//                     return {
+//                         word: data[0].word,
+//                         phonetic: phonetic.text,
+//                         audio: phonetic.audio,
+//                         meaning: data[0].meanings,
+//                         sourceURLs: data[0].sourceUrls
+//                     }
+//                 }
+//             }
+//         }
+
+//         currentWordData = wordData();
+    
+//         handleWordInfo();
+//     })
+//     .catch(error => {
+//         wordInfo.classList.add('hidden');
+//         wordDefinition.classList.add('hidden')
+//         wordNotFound.classList.remove('hidden');
+//     })
+// })
 
 searchBar.addEventListener('input', () => {
     searchBar.classList.remove('search__bar--empty');
