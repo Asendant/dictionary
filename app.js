@@ -32,11 +32,6 @@ const wordNotFound = document.getElementById('word-not-found');
 // Misc
 let currentWordData = {};
 
-// Navbar Functions
-navbarFontSelector.addEventListener('click', function() {
-    navbarFontSelectorOptions.classList.toggle('hidden');
-})
-
 const handleFontChange = (fontFamily) => {
     console.log(fontFamily);
     if (fontFamily === 'Inter') {
