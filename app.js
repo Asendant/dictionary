@@ -34,7 +34,7 @@ let currentWordData = {};
 
 // Navbar Functions
 logo.addEventListener('click', () => {
-    window.location.href = 'https://https://asendant.github.io/dictionary';
+    window.location.href = 'https://asendant.github.io/dictionary/';
 })
 
 navbarFontSelector.addEventListener('click', function() {
