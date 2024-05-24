@@ -442,4 +442,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         changeColorTheme('light');
     }
+
+    // When document loads, display the definition for "keyboard"
+    fetch('https://api.dictionaryapi.dev/api/v2/entries/en/keyboard')
+    .then(response => response.json())
+    .then(data => {
+        let wordData = () => {
+            phoneticsArray = data[0].phonetics;
+            for (const phonetic of phoneticsArray) {
+                if (phonetic.text && phonetic.audio) {
+                    return {
+                        word: data[0].word,
+                        phonetic: phonetic.text,
+                        audio: phonetic.audio,
+                        meaning: data[0].meanings,
+                        sourceURLs: data[0].sourceUrls
+                    }
+                }
+            }
+        }
+
+        currentWordData = wordData();
+    
+        handleWordInfo();
+    })
 });
