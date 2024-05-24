@@ -33,10 +33,6 @@ const wordNotFound = document.getElementById('word-not-found');
 let currentWordData = {};
 
 // Navbar Functions
-logo.addEventListener('click', () => {
-    window.location.href = '/dictionary/';
-})
-
 navbarFontSelector.addEventListener('click', function() {
     navbarFontSelectorOptions.classList.toggle('hidden');
 })
