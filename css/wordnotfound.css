@@ -11,10 +11,12 @@
 
 #word-not-found > h1 {
     font-size: 4rem;
+    text-align: center;
 }
 
 #word-not-found > h2 {
     font-size: 1.25rem;
+    text-align: center;
 }
 
 #word-not-found > p {
